@@ -75,10 +75,14 @@ var VoiceRSS = {
     }
 };
 
-function test() {
+
+
+// passing joke to VoiceRSS API
+function tellMe(joke){
+  
     VoiceRSS.speech({
         key: '63c1d62f7479446a82c26d6abd0d55c0',
-        src: 'Hello, world!',
+        src: joke,
         hl: 'en-us',
         v: 'Linda',
         r: 0,
@@ -88,4 +92,29 @@ function test() {
     });
 }
 
-test();
+// Get jokes from joke api
+async function getJokes() {
+
+    let joke = '';
+
+    const apiUrl = 'https://sv443.net/jokeapi/v2/joke/Programming?blacklistFlags=racist';
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        if (data.setup) {
+            // for 2 part joke
+            joke = `${data.setup} ... ${data.delivery}`;
+        } else {
+            // for single line joke
+            joke = data.joke;
+        }
+        tellMe(joke);
+        
+        
+    } catch (error) {
+        console.log('error thrown', error);
+        
+    }
+}
+
+getJokes();
