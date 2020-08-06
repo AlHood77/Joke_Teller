@@ -75,7 +75,10 @@ var VoiceRSS = {
     }
 };
 
-
+// prevent user from firing another joke until the last one has completed.
+function toggleButton() {
+    button.disabled = !button.disabled;
+}
 
 // passing joke to VoiceRSS API
 function tellMe(joke){
@@ -108,7 +111,11 @@ async function getJokes() {
             // for single line joke
             joke = data.joke;
         }
+
+        // text to speech
         tellMe(joke);
+        // disable button
+        toggleButton();
         
         
     } catch (error) {
@@ -117,4 +124,8 @@ async function getJokes() {
     }
 }
 
-getJokes();
+
+
+// Event listeners
+button.addEventListener('click', getJokes);
+audioElement.addEventListener('ended', toggleButton);
